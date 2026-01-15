@@ -5,7 +5,7 @@
     { "source": "/(.*)", "destination": "/public/$1" }
   ],
   "functions": {
-    "src/server/index.js": {
+    "src/server/server.js": {
       "runtime": "vercel-node@latest"
     }
   }
