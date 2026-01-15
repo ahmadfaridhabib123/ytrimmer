@@ -110,7 +110,7 @@ app.get('/video-info', rateLimiter, async (req, res) => {
     logger.info('Fetching video info', { url: sanitizedUrl, videoId });
 
     // Get video info using yt-dlp
-    const cmd = `yt-dlp --dump-json --no-download "${sanitizedUrl}"`;
+    const cmd = `yt-dlp --cookies ./cookies.txt --dump-json --no-download "${sanitizedUrl}"`;
     const { stdout } = await execPromise(cmd, {
       maxBuffer: 1024 * 1024 * 5,
       timeout: 30000
@@ -376,7 +376,7 @@ async function processMultiVideo(taskId, options) {
         ? 'bestaudio[ext=m4a]/bestaudio/best'
         : `bestvideo[height<=${quality}][ext=mp4]/bestvideo[height<=${quality}]/best[height<=${quality}]`;
 
-      const getUrlCmd = `yt-dlp -f "${formatSelector}" -g "${url}"`;
+      const getUrlCmd = `yt-dlp --cookies ./cookies.txt -f "${formatSelector}" -g "${url}"`;
       const process = spawn(getUrlCmd, [], { shell: true });
       let output = '';
 
@@ -395,7 +395,7 @@ async function processMultiVideo(taskId, options) {
     // Get audio stream URL (for video format)
     if (format !== 'mp3') {
       await new Promise((resolve) => {
-        const getAudioCmd = `yt-dlp -f "bestaudio[ext=m4a]/bestaudio" -g "${url}"`;
+        const getAudioCmd = `yt-dlp --cookies ./cookies.txt -f "bestaudio[ext=m4a]/bestaudio" -g "${url}"`;
         const process = spawn(getAudioCmd, [], { shell: true });
         let output = '';
 
@@ -563,7 +563,7 @@ async function processVideo(taskId, options) {
         ? 'bestaudio[ext=m4a]/bestaudio/best'
         : `bestvideo[height<=${quality}][ext=mp4]/bestvideo[height<=${quality}]/best[height<=${quality}]`;
 
-      const getUrlCmd = `yt-dlp -f "${formatSelector}" -g "${url}"`;
+      const getUrlCmd = `yt-dlp --cookies ./cookies.txt -f "${formatSelector}" -g "${url}"`;
       logger.debug('Getting stream URL', { taskId, cmd: getUrlCmd.replace(url, '[URL]') });
 
       const process = spawn(getUrlCmd, [], { shell: true });
@@ -599,7 +599,7 @@ async function processVideo(taskId, options) {
       });
 
       await new Promise((resolve, reject) => {
-        const getAudioCmd = `yt-dlp -f "bestaudio[ext=m4a]/bestaudio" -g "${url}"`;
+        const getAudioCmd = `yt-dlp --cookies ./cookies.txt -f "bestaudio[ext=m4a]/bestaudio" -g "${url}"`;
 
         const process = spawn(getAudioCmd, [], { shell: true });
         let output = '';
