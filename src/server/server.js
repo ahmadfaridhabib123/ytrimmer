@@ -873,7 +873,7 @@ setInterval(() => {
   }
 }, config.cleanup.cleanupIntervalMs);
 
-// ===========================================
+/ ===========================================
 // START SERVER
 // ===========================================
 
@@ -883,10 +883,10 @@ if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
-// Cek apakah sedang dijalankan di environment Serverless (seperti Vercel)
-// Jika di lokal atau platform server biasa (Railway/Render), server akan menyala
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-  const server = app.listen(config.port, () => {
+// FIX UNTUK RAILWAY: Gunakan 0.0.0.0 agar bisa diakses publik
+const port = process.env.PORT || config.port || 3000;
+
+const server = app.listen(port, '0.0.0.0', () => {
   logger.info('===========================================');
   logger.info(`        Bibboys YTrimmer Server v2.1`);
   logger.info('===========================================');
@@ -906,16 +906,15 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   logger.info(` ✓ Max Duration: ${config.video.maxDurationSeconds / 60} minutes`);
 });
 
-  // Handle server errors
-  server.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
-      console.error(`\n ERROR: Port ${config.port} sudah digunakan!`);
-      process.exit(1);
-    }
-  });
-}
+// Handle server errors
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n ERROR: Port ${port} sudah digunakan!`);
+    process.exit(1);
+  }
+});
 
-// WAJIB: Export app untuk Vercel atau testing
+// Export app untuk testing
 module.exports = app;
 
 // Handle server errors (like port already in use)
