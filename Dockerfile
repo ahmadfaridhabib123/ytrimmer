@@ -1,22 +1,26 @@
-FROM node:18-slim
+# Gunakan base image python (karena yt-dlp butuh python)
+FROM python:3.10-slim
 
-# Install FFmpeg dan Python untuk downloader
-RUN apt-get update && apt-get install -y ffmpeg python3 curl && \
-    curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
-    chmod a+rx /usr/local/bin/yt-dlp
+# Install ffmpeg dan Node.js (untuk yt-dlp runtime)
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
+# Install yt-dlp terbaru
+RUN pip install --no-cache-dir yt-dlp
+
+# Set working directory
 WORKDIR /app
 
-# Copy package files dulu agar install lebih cepat
+# Copy package.json dan install dependensi npm
 COPY package*.json ./
-RUN npm install --production
+RUN npm install
 
-# Copy semua file project
+# Copy semua file aplikasi
 COPY . .
 
-# Pastikan Railway tahu portnya
-ENV PORT=3000
-EXPOSE 3000
-
-# Gunakan npm start agar membaca script dari package.json kamu
+# Jalankan aplikasi
 CMD ["npm", "start"]
