@@ -888,7 +888,7 @@ const server = app.listen(port, '0.0.0.0', () => {
   logger.info('===========================================');
   logger.info(`        Bibboys YTrimmer Server v2.1`);
   logger.info('===========================================');
-  logger.info(Server running at: [suspicious link removed]:${port});
+  logger.info(`Server running at: [suspicious link removed]:${port}`);
   logger.info(`Serving files from: ${path.join(__dirname, config.paths.public)}`);
   logger.info(`Environment: ${config.nodeEnv}`);
   logger.info('===========================================');
