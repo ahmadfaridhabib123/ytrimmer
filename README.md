@@ -34,7 +34,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/yt-trimmer.git
+git clone https://github.com/ahmadfaridhabib123/ytrimmer.git
 cd yt-trimmer
 
 # Install dependencies
