@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/src/server/index.js" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ],
+  "functions": {
+    "src/server/index.js": {
+      "runtime": "vercel-node@latest"
+    }
+  }
+}
