@@ -1,7 +1,7 @@
-# Gunakan base image python (karena yt-dlp butuh python)
+# Gunakan base image python
 FROM python:3.10-slim
 
-# Install ffmpeg dan Node.js (untuk yt-dlp runtime)
+# Install ffmpeg dan Node.js (WAJIB agar yt-dlp bisa baca info YouTube)
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     curl \
@@ -9,18 +9,18 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Install yt-dlp terbaru
+# Install yt-dlp versi terbaru
 RUN pip install --no-cache-dir yt-dlp
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json dan install dependensi npm
+# Install dependensi npm aplikasi kamu
 COPY package*.json ./
 RUN npm install
 
-# Copy semua file aplikasi
 COPY . .
 
-# Jalankan aplikasi
+# Pastikan port menggunakan variable environment
+ENV PORT=3000
+
 CMD ["npm", "start"]

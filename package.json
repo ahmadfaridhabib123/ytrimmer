@@ -8,7 +8,7 @@
     "trim": "node src/actions/single-part.js",
     "trimall": "node src/actions/multiple-parts.js",
     "start": "node src/server/server.js",
-    "dev": "node src/server/server.js",
+    "dev": "nodemon src/server/server.js",
     "build": "npx tailwindcss -i ./public/input.css -o ./public/style.css",
     "health": "curl -s http://localhost:3000/health | node -e \"console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')))\"",
     "clean": "node -e \"const fs=require('fs');fs.readdirSync('.').filter(f=>f.startsWith('temp_')).forEach(f=>fs.unlinkSync(f));console.log('Cleanup done')\""
